@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hilandero De Color</string>
+    <string-array name="colors_array">
+        <item>Rojo</item>
+        <item>Verde</item>
+        <item>Azul</item>
+        <item>Cian</item>
+        <item>Amarillo</item>
+        <item>Magenta</item>
+        <item>Gris</item>
+        <item>Negro</item>
+        <item>Agua</item>
+    </string-array>
+</resources>
