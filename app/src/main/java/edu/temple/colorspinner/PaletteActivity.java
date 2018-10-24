@@ -1,54 +1,44 @@
 package edu.temple.colorspinner;
 
-import android.content.res.Resources;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Spinner;
 
-public class PaletteActivity extends AppCompatActivity {
+public class PaletteActivity extends AppCompatActivity implements DetailFragment.GetColorInterface {
+
+    boolean singlePane;
+    FragmentManager fm;
+    DetailFragment df;
+    CanvasFragment cf;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_palette);
 
-        //retrieve string-array resources
-        Resources res = this.getResources();
-        String[] spinnerLabels = res.getStringArray(R.array.colors_array);
+        singlePane = findViewById(R.id.container2) == null;
 
-        final Spinner spinner = findViewById(R.id.spinner);
-        CustomAdapter customAdapter = new CustomAdapter(PaletteActivity.this, spinnerLabels);
-        spinner.setAdapter(customAdapter);
+        df = new DetailFragment();
 
-        //spinner.post prevents onItemSelected from launching immediately when app starts
-        spinner.post(new Runnable() {
-            @Override
-            public void run() {
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                        String colorSelect = adapterView.getItemAtPosition(position).toString();
-                        Fragment fragment = new CanvasFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("color", colorSelect);
-                        fragment.setArguments(bundle);
-                        FragmentManager fragManager = getSupportFragmentManager();
-                        fragManager.beginTransaction()
-                                .replace(R.id.container, fragment)
-                                .addToBackStack(null)
-                                .commit();
-                    }
+        fm = getSupportFragmentManager();
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-                    }
-                });
-            }
-        });
+        fm.beginTransaction()
+                .replace(R.id.container, df)
+                .commit();
+    }
 
+    public void colorSelect(String colorItem) {
+        cf = (new CanvasFragment()).newInstance(colorItem);
+        if (singlePane) {
+            fm.beginTransaction()
+                    .replace(R.id.container, cf)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            fm.beginTransaction()
+                    .replace(R.id.container2, cf)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 }

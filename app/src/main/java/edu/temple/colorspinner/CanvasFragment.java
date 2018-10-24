@@ -49,4 +49,10 @@ public class CanvasFragment extends Fragment {
         return view;
     }
 
+    public static CanvasFragment newInstance() {
+        Bundle args = new Bundle();
+        CanvasFragment fragment = new CanvasFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 }
